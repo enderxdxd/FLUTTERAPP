@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:login_signup/screens/welcome_screen.dart';
+<<<<<<< Updated upstream
 import 'package:login_signup/theme/theme.dart';  // Path to this Firebase configuration file
 import 'package:firebase_core/firebase_core.dart';
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+=======
+import 'package:login_signup/theme/theme.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+
+void main() async{
+>>>>>>> Stashed changes
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
