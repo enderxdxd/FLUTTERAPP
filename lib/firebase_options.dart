@@ -90,4 +90,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'flutterapp-a6108.appspot.com',
     measurementId: 'G-X1T90Y72SS',
   );
+
 }

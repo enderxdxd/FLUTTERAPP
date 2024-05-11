@@ -1,19 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:login_signup/screens/signin_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  Future<void> _signOut() async {
-    try {
-      await _auth.signOut();
-      // Navigate to your sign-in screen or another appropriate screen
-    } catch (e) {
-      print("Error signing out: $e");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +14,8 @@ class HomeScreen extends StatelessWidget {
         title: Text('Home Screen'),
         actions: [
           IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () {
-              _signOut();
-            },
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () => _signOut(context),
           ),
         ],
       ),
@@ -39,20 +29,31 @@ class HomeScreen extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Text(
-              'You are now logged in.',
-              style: TextStyle(fontSize: 18),
+              'You are logged in as: ${_auth.currentUser?.email}',
+              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
             ),
             SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
-                // Add your navigation or functionality here
-                print('Button pressed!');
+                // You can add more navigation logic here if needed
               },
-              child: Text('Click Me!'),
+              child: Text('Explore Features'),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _signOut(BuildContext context) async {
+    try {
+      await _auth.signOut();
+      // Navigate back to the SignInScreen after signing out
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => SignInScreen()));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to sign out: $e'))
+      );
+    }
   }
 }
