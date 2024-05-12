@@ -4,6 +4,7 @@ import 'package:login_signup/screens/HomeScreen.dart'; // Ensure you have a Home
 import 'package:login_signup/widgets/custom_scaffold.dart';
 import 'package:login_signup/theme/theme.dart';
 
+
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
 
@@ -39,7 +40,7 @@ class _SignInScreenState extends State<SignInScreen> {
       );
 
       // Navigate to HomeScreen on success
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => Home()));
     } on FirebaseAuthException catch (e) {
       String errorMessage = 'Failed to sign in';
       if (e.code == 'user-not-found') {

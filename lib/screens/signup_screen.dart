@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../auth.dart';
 import 'HomeScreen.dart';
 
-
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
@@ -42,7 +41,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         password: _controllerPassword.text.trim(),
       );
       // Navigate to home screen or next appropriate screen after successful registration
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen())); // Make sure you define HomeScreen
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => Home())); // Make sure you define HomeScreen
     } on FirebaseAuthException catch (e) {
       _errorMessage = e.message;
     } finally {

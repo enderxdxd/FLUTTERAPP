@@ -1,59 +1,173 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:login_signup/screens/signin_screen.dart';
+import 'package:login_signup/api/api.dart';
+import '../models/movie_model.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key}) : super(key: key);
+class Home extends StatefulWidget {
+  const Home({super.key});
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  late Future<List<Movie>> upcomingMovies;
+  late Future<List<Movie>> popularMovies;
+  late Future<List<Movie>> topRatedMovies;
+
+  @override
+  void initState() {
+    upcomingMovies = Api().getUpcomingMovies();
+    popularMovies = Api().getPopularMovies();
+    topRatedMovies = Api().getTopRatedMovies();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black12,
       appBar: AppBar(
-        title: Text('Home Screen'),
+        backgroundColor: Colors.black12,
+        foregroundColor: Colors.white,
+        leading: IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
+        title: const Text("Show Spot"),
+        centerTitle: true,
         actions: [
-          IconButton(
-            icon: Icon(Icons.exit_to_app),
-            onPressed: () => _signOut(context),
-          ),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.search_rounded)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Welcome to the Home Page!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'You are logged in as: ${_auth.currentUser?.email}',
-              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-            ),
-            SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to the Movie Explorer Page
-                Navigator.of(context).pushNamed('/movieExplorer');
-              },
-              child: Text('Explore Features'),
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Upcoming',
+                style: TextStyle(color: Colors.white),
+              ),
+              //Carousel
+              FutureBuilder(
+                future: upcomingMovies,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  final movies = snapshot.data!;
+
+                  return CarouselSlider.builder(
+                    itemCount: movies.length,
+                    itemBuilder: (context, index, movieIndex) {
+                      final movie = movies[index];
+                      return Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                        child: Image.network("https://image.tmdb.org/t/p/original/${movie.backDropPath}"),
+                      );
+                    },
+                    options: CarouselOptions(
+                        autoPlay: true,
+                        enlargeCenterPage: true,
+                        aspectRatio: 1.4,
+                        autoPlayInterval: const Duration(seconds: 3)),
+                  );
+                },
+              ),
+
+              //Popular Movies
+              const Text(
+                'Popular',
+                style: TextStyle(color: Colors.white),
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 20),
+                height: 200,
+                child: FutureBuilder(
+                  future: popularMovies,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    final movies = snapshot.data!;
+                    return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: movies.length,
+                      itemBuilder: (context, index) {
+                        final movie = movies[index];
+
+                        return Container(
+                          width: 150,
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15)),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.network(
+                              "https://image.tmdb.org/t/p/original/${movie.backDropPath}",
+                              height: 120,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+
+              const Text(
+                'Top Rated',
+                style: TextStyle(color: Colors.white),
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 20),
+                height: 200,
+                child: FutureBuilder(
+                  future: topRatedMovies,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    final movies = snapshot.data!;
+                    return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: movies.length,
+                      itemBuilder: (context, index) {
+                        final movie = movies[index];
+
+                        return Container(
+                          width: 150,
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15)),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.network(
+                              "https://image.tmdb.org/t/p/original/${movie.backDropPath}",
+                              height: 120,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
-  }
-
-  void _signOut(BuildContext context) async {
-    try {
-      await _auth.signOut();
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => SignInScreen()));
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to sign out: $e'))
-      );
-    }
   }
 }
