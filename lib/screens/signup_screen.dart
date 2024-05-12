@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../auth.dart';
 import 'HomeScreen.dart';
 
+
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
@@ -17,6 +18,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final GlobalKey<FormState> _formSignupKey = GlobalKey<FormState>();
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
+  
   bool _agreePersonalData = true;
   bool _isLoading = false;
   String? _errorMessage;
@@ -169,3 +171,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 }
+ 
+                
+          
+                   
+

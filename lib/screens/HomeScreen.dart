@@ -35,7 +35,8 @@ class HomeScreen extends StatelessWidget {
             SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
-                // You can add more navigation logic here if needed
+                // Navigate to the Movie Explorer Page
+                Navigator.of(context).pushNamed('/movieExplorer');
               },
               child: Text('Explore Features'),
             ),
@@ -48,7 +49,6 @@ class HomeScreen extends StatelessWidget {
   void _signOut(BuildContext context) async {
     try {
       await _auth.signOut();
-      // Navigate back to the SignInScreen after signing out
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => SignInScreen()));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
