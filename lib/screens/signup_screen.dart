@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:icons_plus/icons_plus.dart';
+import 'package:login_signup/widgets/custom_scaffold.dart';
 import 'package:login_signup/screens/signin_screen.dart';
 import 'package:login_signup/theme/theme.dart';
-import 'package:login_signup/widgets/custom_scaffold.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../auth.dart';
-import 'home_screen.dart';
-
-
+import 'HomeScreen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -20,6 +17,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final GlobalKey<FormState> _formSignupKey = GlobalKey<FormState>();
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
+  
   bool _agreePersonalData = true;
   bool _isLoading = false;
   String? _errorMessage;
@@ -42,8 +40,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         email: _controllerEmail.text.trim(),
         password: _controllerPassword.text.trim(),
       );
-      // Navigate to home screen or next appropriate screen
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen())); // Assuming HomeScreen is your landing page after sign-up
+      // Navigate to home screen or next appropriate screen after successful registration
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => Home())); // Make sure you define HomeScreen
     } on FirebaseAuthException catch (e) {
       _errorMessage = e.message;
     } finally {
@@ -69,31 +67,74 @@ class _SignUpScreenState extends State<SignUpScreen> {
               child: Form(
                 key: _formSignupKey,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    Text(
+                      'Get Started',
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.w900,
+                        color: lightColorScheme.primary,
+                      ),
+                    ),
+                    SizedBox(height: 40.0),
+                    TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your full name';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Full Name',
+                        hintText: 'Enter your full name',
+                        hintStyle: TextStyle(color: Colors.black26),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black12),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 25.0),
                     TextFormField(
                       controller: _controllerEmail,
-                      decoration: const InputDecoration(labelText: 'Email'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your email';
                         }
-                        if (!value.contains('@')) {
-                          return 'Please enter a valid email';
-                        }
                         return null;
                       },
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        hintText: 'Enter your email',
+                        hintStyle: TextStyle(color: Colors.black26),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black12),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                     ),
+                    SizedBox(height: 25.0),
                     TextFormField(
                       controller: _controllerPassword,
                       obscureText: true,
-                      decoration: const InputDecoration(labelText: 'Password'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter a password';
                         }
                         return null;
                       },
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        hintText: 'Enter your password',
+                        hintStyle: TextStyle(color: Colors.black26),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black12),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                     ),
+                    SizedBox(height: 25.0),
                     Row(
                       children: [
                         Checkbox(
@@ -103,14 +144,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               _agreePersonalData = value!;
                             });
                           },
+                          activeColor: lightColorScheme.primary,
                         ),
-                        const Expanded(child: Text('I agree to the processing of my personal data.')),
+                        Expanded(
+                          child: Text('I agree to the processing of my personal data.', style: TextStyle(color: Colors.black45)),
+                        ),
                       ],
                     ),
-                    ElevatedButton(
-                      onPressed: _isLoading ? null : registerWithEmailAndPassword,
-                      child: _isLoading ? const CircularProgressIndicator(color: Colors.white) : const Text('Sign Up'),
+                    SizedBox(height: 25.0),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _isLoading ? null : registerWithEmailAndPassword,
+                        child: _isLoading ? CircularProgressIndicator(color: Colors.white) : Text('Register'),
+                      ),
                     ),
+                    SizedBox(height: 20.0),
                   ],
                 ),
               ),
@@ -121,3 +170,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 }
+ 
+                
+          
+                   
+
