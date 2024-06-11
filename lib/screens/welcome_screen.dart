@@ -14,7 +14,7 @@ class WelcomeScreen extends StatelessWidget {
       child: Column(
         children: [
           Flexible(
-              flex: 8,
+              flex: 6,
               child: Container(
                 padding: const EdgeInsets.symmetric(
                   vertical: 0,
@@ -26,14 +26,14 @@ class WelcomeScreen extends StatelessWidget {
                     text: const TextSpan(
                       children: [
                         TextSpan(
-                            text: 'Welcome Back!\n',
+                            text: 'Bem-vindo!\n',
                             style: TextStyle(
                               fontSize: 45.0,
                               fontWeight: FontWeight.w600,
                             )),
                         TextSpan(
                             text:
-                                '\nEnter personal details to your employee account',
+                                '\n',
                             style: TextStyle(
                               fontSize: 20,
                               // height: 0,
@@ -51,7 +51,7 @@ class WelcomeScreen extends StatelessWidget {
                 children: [
                   const Expanded(
                     child: WelcomeButton(
-                      buttonText: 'Sign in',
+                      buttonText: 'Entrar',
                       onTap: SignInScreen(),
                       color: Colors.transparent,
                       textColor: Colors.white,
@@ -59,7 +59,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: WelcomeButton(
-                      buttonText: 'Sign up',
+                      buttonText: 'Registre-se',
                       onTap: const SignUpScreen(),
                       color: Colors.white,
                       textColor: lightColorScheme.primary,
